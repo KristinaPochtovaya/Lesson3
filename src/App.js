@@ -1,26 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+
+class Pokemon extends React.Component {
+  constructor (props){
+    super(props)
+
+    this.state = {
+      pokemonTypes: null,
+    };
+  }
+
+  async componentDidMount() {
+    const response = await fetch('https://pokeapi.co/api/v2/pokemon-form');
+    const pokemonTypes = await response.json();
+  
+    this.setState({
+      pokemonTypes: pokemonTypes.results,
+    })
+  }
+
+  componentDidUpdate(){
+    
+  }
+
+  render() {
+    if (this.state.pokemonTypes === null){
+       return "...Loading..."
+
+      }
+  return (
+    <ul>
+      {this.state.pokemonTypes.map((type) => (
+        <li key={Math.round(Math.random()*10000)}>
+          {type.name} 
+        </li>
+      ))}
+    </ul>
+  );
+  }
+};
+
+export default Pokemon;
